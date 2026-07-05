@@ -9,5 +9,13 @@ public class Denomination{
     public Denomination(int value, int quantity){
         this.value = value;
         this.quantity = quantity;
-    }   
+    }
+
+    public int getValue(){
+        return this.value;
+    }
+
+    public int getQuantity(){
+        return this.quantity;
+    }
 }
