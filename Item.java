@@ -1,16 +1,15 @@
 public class Item {
-    
-
-    private final String name;
-    
-
-    private final int calories;
-    
-
-    private double price;
+    private String name;
+    private int price;
+    private double calories;
 
 
-    public Item(String name, int calories, double price) {
+    public Item(String name, double calories) {
+        this.name = name;
+        this.calories = calories;
+    }
+
+    public Item(String name, int price, double calories) {
         this.name = name;
         this.calories = calories;
         this.price = price;
@@ -22,17 +21,17 @@ public class Item {
     }
 
    
-    public int getCalories() {
+    public double getCalories() {
         return this.calories;
     }
 
   
-    public double getPrice() {
+    public int getPrice() {
         return this.price;
     }
 
    
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         if (price >= 0) {
             this.price = price;
         }
