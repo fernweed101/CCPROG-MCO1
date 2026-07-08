@@ -43,7 +43,7 @@ public class ItemSlot{
         return this.slotCapacity;
     }
 
-    public void setNumItems(){
-
+    public void setNumItems(int numItems){
+        this.numItems = numItems;
     }
 }

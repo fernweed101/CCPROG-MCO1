@@ -1,5 +1,5 @@
 public class Denomination{
-    private int value;
+    private double value;
     private int quantity;
 
     public Denomination(int value){
@@ -11,7 +11,7 @@ public class Denomination{
         this.quantity = quantity;
     }
 
-    public int getValue(){
+    public double getValue(){
         return this.value;
     }
 

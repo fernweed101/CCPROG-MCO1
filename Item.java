@@ -1,6 +1,6 @@
 public class Item {
     private String name;
-    private int price;
+    private double price;
     private double calories;
 
 
@@ -26,7 +26,7 @@ public class Item {
     }
 
   
-    public int getPrice() {
+    public double getPrice() {
         return this.price;
     }
 
