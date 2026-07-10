@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class ItemSlot {
     private String slotId;
     private Item item; 
-    private ArrayList<Item> items;
+    private ArrayList<Item> items = new ArrayList<Item>();
     private int initalNum;
     private int slotCapacity;
 
@@ -29,7 +29,7 @@ public class ItemSlot {
         
       
         for (int i = 0; i < initalNum; i++) {
-            Item newItem = new Item(item.getName(), (int)item.getPrice(), item.getCalories());
+            Item newItem = new Item(item.getName(), item.getCalories(), item.getPrice());
             this.items.add(newItem);
         }
     }
