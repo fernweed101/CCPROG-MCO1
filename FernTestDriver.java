@@ -1,17 +1,17 @@
 import java.util.Scanner;
 
-public class TestDriver {
+public class FernTestDriver {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
        System.out.println("=== INITIALIZING VENDING MACHINE ===");
         // 1. Create a vending machine with 8 slots (for our 2x4 grid)
-        RegularVendo vendingMachine = new RegularVendo(10);
+        FernRegularVendo vendingMachine = new FernRegularVendo(10);
 
         // 2. Create physical item templates
-        Item soda = new Item("Coke Soda", 50, 140.0);
-        Item chips = new Item("Potato Chips", 35, 220.0);
-        Item candy = new Item("Chocolate Bar", 40, 250.0);
+        Item soda = new Item("Coke Soda", 50, 140);
+        Item chips = new Item("Potato Chips", 35, 220);
+        Item candy = new Item("Chocolate Bar", 40, 250);
 
         // 3. Create physical slots with stocks
         // Slot coordinates map directly to indices 0, 1, and 2

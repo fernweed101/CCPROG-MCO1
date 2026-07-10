@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class RegularVendo {
+public class FernRegularVendo {
     private ItemSlot[] slots;
     private ArrayList<Denomination> cash;
     private ArrayList<Double> customerDenominations;
 
     // Fixed constructor parameter name to avoid variable shadowing confusion
-    public RegularVendo(int totalSlots) {
+    public FernRegularVendo(int totalSlots) {
         this.slots = new ItemSlot[totalSlots];
         this.cash = new ArrayList<>();
         this.customerDenominations = new ArrayList<>();
@@ -144,7 +144,7 @@ public class RegularVendo {
             System.out.print("Current Total: Php " + total + ". Insert more or 0 to stop: ");
             input = scanner.nextDouble();
         }
-
+        scanner.close();
         return total;   // Returns the total amount of money the user put in the machine
     }
 
