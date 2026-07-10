@@ -62,7 +62,7 @@ public class RegularVendo{
 
         if(total >= slots[index].getItem().getPrice()){
             System.out.println(slots[index].getItem().getName() + " has been dispensed");
-            slots[index].setNumItems(slots[index].getNumItems() - 1);
+            slots[index].dispense();
             change = total - slots[index].getItem().getPrice();
         }else{
             System.out.println("Insufficient funds");
@@ -142,3 +142,10 @@ public void displayItems() {
         System.out.println(horizontalDivider);
         System.out.println("=====================================================================================================");
     }
+
+private String truncate(String text, int length) {
+        if (text != null && text.length() > length) {
+            return text.substring(0, length - 2) + "..";
+        }
+        return text;
+}
