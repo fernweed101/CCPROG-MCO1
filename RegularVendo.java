@@ -42,12 +42,24 @@ public class RegularVendo{
     public double dispenseItem(int index, double total){
         double change;
 
-        if(total >= slots[index].getItem().getPrice() && ){
-            System.out.println(slots[index].getItem().getName() + " has been dispensed");
-            slots[index].setNumItems(slots[index].getNumItems() - 1);
-            change = total - slots[index].getItem().getPrice();
-        }else{
-            System.out.println("Insufficient funds");
+
+        if(total >= slots[index].getItem().getPrice()) {
+            
+
+            Item dispensedItem = slots[index].dispense(); 
+            
+            if (dispensedItem != null) {
+                System.out.println(dispensedItem.getName() + " has been dispensed.");
+                System.out.println("Calories: " + dispensedItem.getCalories()); // Added calorie display requirement
+                
+                change = total - dispensedItem.getPrice();
+            } else {
+                System.out.println("Sorry, this item is out of stock.");
+                change = total;
+            }
+            
+        } else {
+            System.out.println("Insufficient funds.");
             change = total;
         }
 
