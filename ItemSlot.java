@@ -29,7 +29,6 @@ public class ItemSlot {
         
       
         for (int i = 0; i < initalNum; i++) {
-            \
             Item newItem = new Item(item.getName(), (int)item.getPrice(), item.getCalories());
             this.items.add(newItem);
         }
