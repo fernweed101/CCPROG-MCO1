@@ -1,45 +1,27 @@
 import java.util.ArrayList;
 
 public class ItemSlot {
-    private String slotId;
-    private Item item; 
-    private ArrayList<Item> items = new ArrayList<Item>();
+    private int slotId;
+    private ArrayList<Item> items;
     private int initalNum;
     private int slotCapacity;
 
-    public ItemSlot(String slotId, int slotCapacity) {
+    public ItemSlot(int slotId, int slotCapacity) {
         this.slotId = slotId;
         this.slotCapacity = slotCapacity;
-        this.items = new ArrayList<>();
+        this.items = new ArrayList<Item>();
     }
 
-    public ItemSlot(String slotId, int slotCapacity, Item item) {
-        this.slotId = slotId;
-        this.slotCapacity = slotCapacity;
-        this.item = item;
-        this.items = new ArrayList<>();
-    }
-
-    public ItemSlot(String slotId, int slotCapacity, Item item, int initalNum) {
-        this.slotId = slotId;
-        this.slotCapacity = slotCapacity;
-        this.item = item;
-        this.initalNum = initalNum;
-        this.items = new ArrayList<>();
-        
-      
-        for (int i = 0; i < initalNum; i++) {
-            Item newItem = new Item(item.getName(), item.getCalories(), item.getPrice());
-            this.items.add(newItem);
-        }
-    }
-
-    public String getSlot() {
+    public int getSlot() {
         return this.slotId;
     }
 
     public Item getItem() {
-        return this.item;
+        Item item = null;
+         if (!items.isEmpty()) {
+            item = items.get(0);
+        }
+        return item;
     }
 
 
