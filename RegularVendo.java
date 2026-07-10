@@ -3,28 +3,46 @@ import java.util.Scanner;
 
 public class RegularVendo{
     private ItemSlot[] slots;
-    private ArrayList<Denomination> cash;
-    private ArrayList<Double> customerDenominations;
+    private int totalCash;
+    private ArrayList<Integer> cash = new ArrayList<Integer>();
+    private ArrayList<Integer> customerDenominations = new ArrayList<Integer>();
 
     public RegularVendo(int slots){
+        this.totalCash = 0;
         this.slots = new ItemSlot[slots];
     }
 
-    public double recievePayment(){
+    public int recievePayment(){
         Scanner scanner = new Scanner(System.in);
-        double total = 0.0;
-        double input = scanner.nextDouble();
+        int total = 0;
+        int input = scanner.nextInt();
         boolean testVal = false;    //placeholder
 
         //Should keep recieving payment as long as input is valid
         while (testVal){
             total += input;
             customerDenominations.add(input);
-            input = scanner.nextDouble();
+            input = scanner.nextInt();
         }
 
         scanner.close();
         return total;   //Returns the total amount of money the user put in the machine
+    }
+
+    public ArrayList<Integer> produceChange(int totalChage){
+        ArrayList<Integer> change = new ArrayList<Integer>();
+
+        if(totalChage <= totalChage){
+            int curTotal = 0;
+            while (curTotal < totalChage) {
+                //goes through denoms in cash then transfers that denom from cash to change
+            }
+        }else{
+            System.out.println("Not enough change in machine for " + totalChage);
+            //Stop transaction
+        }
+
+        return change;  //returns the change arraylist
     }
 
     public int chooseItem(String slot){
@@ -36,13 +54,13 @@ public class RegularVendo{
             }
         }
 
-        return index;  //returns the index where the slot with wanted item was found or if not found -1
+        return index;  //returns the index if the slot entered is valid otherwise -1
     }
 
-    public double dispenseItem(int index, double total){
-        double change;
+    public int dispenseItem(int index, int total){
+        int change;
 
-        if(total >= slots[index].getItem().getPrice() && ){
+        if(total >= slots[index].getItem().getPrice()){
             System.out.println(slots[index].getItem().getName() + " has been dispensed");
             slots[index].setNumItems(slots[index].getNumItems() - 1);
             change = total - slots[index].getItem().getPrice();
@@ -52,9 +70,5 @@ public class RegularVendo{
         }
 
         return change;  //returns the change after the transaction
-    }
-
-    public ArrayList<Denomination> getCurrentDenominations(){
-        return this.cash;
     }
 }

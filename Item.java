@@ -1,15 +1,15 @@
 public class Item {
     private String name;
-    private double price;
+    private int price;
     private double calories;
 
 
-    public Item(String name, double calories) {
+    public Item(String name, double calories){
         this.name = name;
         this.calories = calories;
     }
 
-    public Item(String name, int price, double calories) {
+    public Item(String name, double calories, int price) {
         this.name = name;
         this.calories = calories;
         this.price = price;
@@ -26,7 +26,7 @@ public class Item {
     }
 
   
-    public double getPrice() {
+    public int getPrice() {
         return this.price;
     }
 
