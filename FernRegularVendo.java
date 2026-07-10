@@ -86,7 +86,7 @@ public class FernRegularVendo {
                         if (slot.getNumItems() > 0) {
                             Item item = slot.getItem();
                             nameLine.append(String.format(" [%-2s] %-16s |", slotId, truncate(item.getName(), 16)));
-                            priceLine.append(String.format(" Price: Php %-10.2f |", item.getPrice()));
+                            priceLine.append(String.format(" Price: Php %-10d |", item.getPrice()));
                             calLine.append(String.format(" Calories: %-11.0f |", item.getCalories()));
                             stockLine.append(String.format(" Stock: %-14d |", slot.getNumItems()));
                         } else {
