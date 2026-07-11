@@ -188,7 +188,6 @@ public class Driver {
             scanner.next();
         }
     retval = scanner.nextInt();
-    System.out.println("INPUT: " + retval);
     return retval;
     }
 
