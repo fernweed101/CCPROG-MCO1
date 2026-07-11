@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Driver {
@@ -147,6 +146,8 @@ public class Driver {
 
                 if (!transactionSuccess) {
                     vendo.cancelPurchase();
+                }else{
+                    System.out.println("Dispensing change: " + vendo.produceChange(vendo.getTotalCustomerCash() - vendo.getItemSlots()[targetIndex].getItem().getPrice()));
                 }
             } else {
                 System.out.println("Transaction cancelled by user.");

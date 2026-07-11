@@ -88,6 +88,8 @@ public class RegularVendo {
         
         if (remainingChange == 0) {
             this.cash = tempCash; // Commit vault changes since change calculation succeeded
+            this.customerDenominations.clear();
+            this.totalCustomerCash = 0;
             return change;
         }else{
             change = null;
@@ -121,10 +123,9 @@ public class RegularVendo {
             System.out.println("Insufficient funds for " + item.getName());
         }else{
             int changeNeeded = this.totalCustomerCash - item.getPrice();
-            ArrayList<Integer> calculatedChange = produceChange(changeNeeded);
 
             //Checks if vendo has enough chagne for transaction
-            if (calculatedChange == null && changeNeeded > 0) {
+            if (this.totalCash >= changeNeeded && changeNeeded > 0) {
                 System.out.println("Machine cannot provide exact change for this transaction.");
             }else{
                 System.out.println(item.getName() + " has been dispensed!");
@@ -132,13 +133,7 @@ public class RegularVendo {
 
                 // Move the customer's cash permanently into the machine's bank
                 this.cash.addAll(this.customerDenominations);
-
-                
-                if (changeNeeded > 0) {
-                    System.out.println("Dispensing change: " + calculatedChange);
-                    this.customerDenominations.clear();
-                    this.totalCustomerCash = 0;
-                }
+                this.totalCash += item.getPrice();
 
                 status = true;
             }
@@ -160,6 +155,7 @@ public class RegularVendo {
     //For replenishing denomination
     public void addDenomination(int value) {
         this.cash.add(value);
+        this.totalCash += value;
     }
 
     //For stocking of items
