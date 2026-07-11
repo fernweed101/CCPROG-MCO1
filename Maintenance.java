@@ -1,6 +1,4 @@
 public class Maintenance{
-    private int totalCash;
-
     public void stockItem(RegularVendo vendo, Item item, int quantity){
         vendo.addItemStock(item, quantity);
     }
