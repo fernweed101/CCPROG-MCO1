@@ -9,6 +9,7 @@ public class RegularVendo {
     private ArrayList<Integer> cash; 
     private ArrayList<Integer> customerDenominations; 
 
+    //Constructor for RegularVendo
     public RegularVendo(int slots, int slotCapacity) {
         this.totalCash = 0;
         this.cash = new ArrayList<>();
@@ -65,7 +66,7 @@ public class RegularVendo {
         }
     }
 
-    //
+    //Returns an arraylist of denominations for change
     public ArrayList<Integer> produceChange(int totalChange) {
         ArrayList<Integer> change = new ArrayList<>();
         
@@ -95,6 +96,7 @@ public class RegularVendo {
         return change; // Could not make exact change
     }
 
+    //returns the index of the slot with wanted item
     public int chooseItem(int slotIndex) {
         int retVal = -1;
 
@@ -134,18 +136,18 @@ public class RegularVendo {
                 
                 if (changeNeeded > 0) {
                     System.out.println("Dispensing change: " + calculatedChange);
+                    this.customerDenominations.clear();
+                    this.totalCustomerCash = 0;
                 }
 
                 status = true;
             }
         }
-
-        // Reset customer state for next user
         return status;
     }
 
 
-
+    //Cancels purchase and returns all of customer's cash
     public ArrayList<Integer> cancelPurchase() {
         ArrayList<Integer> refund = new ArrayList<>(this.customerDenominations);
         System.out.println("Transaction failed/cancelled. Returning your original denominations: " + refund);
@@ -155,10 +157,12 @@ public class RegularVendo {
         return refund;
     }
 
+    //For replenishing denomination
     public void addDenomination(int value) {
         this.cash.add(value);
     }
 
+    //For stocking of items
     public void addItemStock(Item item, int quantity) {
         int index = -1;
         for (int i = 0; i < slots.length; i++) {
@@ -183,7 +187,7 @@ public class RegularVendo {
         }
     }
 
-
+    //For Display
     public void display() {
         System.out.println("\n=====================================================================================================");
         System.out.println("                                    VENDING MACHINE GLASS WINDOW                                     ");
