@@ -6,8 +6,10 @@ public class ItemSlot {
     private ArrayList<Item> items;
     private int initalNum;
     private int slotCapacity;
+    private boolean initial;
 
     public ItemSlot(int slotId, int slotCapacity) {
+        inital = true;
         this.item = null;
         this.slotId = slotId;
         this.items = new ArrayList<Item>();
@@ -44,6 +46,10 @@ public class ItemSlot {
     }
 
     public boolean addItem(Item newItem) {
+        if(initial){
+            this.item = newItem;
+            initial = false;
+        }
         if (this.items.size() < this.slotCapacity) {
             this.items.add(newItem);
             return true;
