@@ -42,16 +42,40 @@ public class Driver {
                     System.out.println("[3] Collect Payment");
                     System.out.println("[4] Print Summary");
                     System.out.println("[5] Exit");
-                    input = scanner.nextInt();
+                    int input2 = scanner.nextInt();
                     System.out.println("=====================================================================================================");
                     
-                    switch (input) {
+                    switch (input2) {
                         case 1:
+                            Item createdItem = newItem(vendo);
+                            System.out.println("How many of " + createdItem.getName() + " should be put in the machine");
+                            int quantity = scanner.nextInt();
+                            maint.stockItem(vendo, createdItem, quantity);
                             break;
                         case 2:
-                            
+                            System.out.println("What item's price should be changed");
+                            for(ItemSlot slot : vendo.getItemSlots()){
+                                if(slot.getNumItems() > 0){
+                                    System.out.println("[" + slot.getSlot() + "] " + slot.getItem().getName());
+                                }
+                            }
+                            int index = scanner.nextInt() - 1;
+                            if(index < 0 || index >= vendo.getItemSlots().length || vendo.getItemSlots()[index].getItem() == null) {
+                                System.out.println("Invalid slot selection.");
+                            }else{
+                                 System.out.println("Enter new price for " + vendo.getItemSlots()[index].getItem().getName());
+                                int price = scanner.nextInt();
+                                maint.setItemPrice(vendo.getItemSlots()[index].getItem(), price);
+                            }
+                            break;
+                        case 3:
+                            maint.collectPayment(vendo);
+                            break;
+                        case 4:
+                            maint.printSummary(vendo);
+                            break;
                         case 5:
-                            
+                            break;
                         default:
                             System.out.println("Invalid Input");
                             break;
@@ -125,6 +149,29 @@ public class Driver {
             vendo.cancelPurchase();
        }
 
+    }
+
+    private static Item newItem(RegularVendo vendo){
+        Item retItem = null;
+        System.out.println("Please Input Item Name: ");
+        String name = scanner.next();
+
+        for(ItemSlot slot : vendo.getItemSlots()){
+            if(slot.getItem() != null && slot.getItem().getName().equals(name)){
+                retItem = slot.getItem();
+            }
+        }
+
+        if(retItem == null){
+            System.out.println("Please Amount of Calories of Item: ");
+            double calories = scanner.nextDouble();
+            System.out.println("Please Input Item Price: ");
+            int price = scanner.nextInt();
+
+            retItem = new Item(name, calories, price);
+        }
+
+        return retItem;
     }
 
 }

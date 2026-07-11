@@ -47,18 +47,24 @@ public class ItemSlot {
     }
 
     public boolean addItem(Item newItem, int quantity) {
-        if(initial){
+        if (initial) {
             this.item = newItem;
-            this.initalNum = quantity;
             initial = false;
+            this.initalNum = Math.min(quantity, slotCapacity);
         }
-        if (this.items.size() + quantity < this.slotCapacity) {
-            for(int i = 0; i < quantity; i++){
-                this.items.add(newItem);
-            }
-            return true;
+
+        if (quantity <= 0) {
+            return false;
         }
-        return false;
+
+        int spaceLeft = this.slotCapacity - this.items.size();
+        int toAdd = Math.min(quantity, spaceLeft);
+
+        for (int i = 0; i < toAdd; i++) {
+            this.items.add(newItem);
+        }
+
+        return toAdd == quantity;
     }
 
     public Item dispense() {

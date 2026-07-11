@@ -14,7 +14,8 @@ public class Maintenance{
     }
 
     public void collectPayment(RegularVendo vendo){
-        totalCash += vendo.getTotalCash();
+        //totalCash += vendo.getTotalCash();
+        System.out.println("Total of P" + vendo.getTotalCash() + " was Collected");
         vendo.setTotalCash(0);
     }
 
