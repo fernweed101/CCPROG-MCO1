@@ -182,4 +182,85 @@ public class RegularVendo {
             System.out.println("There are currently no empty slots in the vending machine");
         }
     }
+    public void display() {
+        System.out.println("\n=====================================================================================================");
+        System.out.println("                                    VENDING MACHINE GLASS WINDOW                                     ");
+        System.out.println("=====================================================================================================");
+
+        int columns = 4;
+        int totalRows = (int) Math.ceil((double) slots.length / columns);
+
+        // Standardized inner width for each cell (23 characters per slot block)
+        String horizontalDivider = "+-----------------------+-----------------------+-----------------------+-----------------------+";
+
+        for (int row = 0; row < totalRows; row++) {
+            // Print the top border of the shelf row
+            System.out.println(horizontalDivider);
+
+            StringBuilder nameLine   = new StringBuilder("|");
+            StringBuilder priceLine  = new StringBuilder("|");
+            StringBuilder calLine    = new StringBuilder("|");
+            StringBuilder stockLine  = new StringBuilder("|");
+
+            for (int col = 0; col < columns; col++) {
+                int index = (row * columns) + col;
+
+                if (index < slots.length) {
+                    ItemSlot slot = slots[index];
+                    // Using String.valueOf because your getSlot() currently returns an int
+                    String slotId = String.valueOf(slot.getSlot()); 
+                    
+                    // Check if slot has an assigned item template
+                    if (slot.getItem() != null) {
+                        Item item = slot.getItem();
+                        
+                        if (slot.getNumItems() > 0) {
+                            nameLine.append(String.format(" [%-2s] %-16s |", slotId, truncate(item.getName(), 16)));
+                            priceLine.append(String.format(" Price: Php %-10d |", item.getPrice())); // Price is int
+                            calLine.append(String.format(" Calories: %-11.0f |", item.getCalories()));
+                            stockLine.append(String.format(" Stock: %-14d |", slot.getNumItems()));
+                        } else {
+                            nameLine.append(String.format(" [%-2s] %-16s |", slotId, truncate(item.getName(), 16)));
+                            priceLine.append("                       |");
+                            calLine.append("  --- OUT OF STOCK --- |");
+                            stockLine.append(" Stock: 0              |");
+                        }
+                    } else {
+                        // Slot exists but no item has been assigned to it yet by Maintenance
+                        nameLine.append(String.format(" [%-2s] %-16s |", slotId, "EMPTY SLOT"));
+                        priceLine.append("                       |");
+                        calLine.append("     --- VACANT ---    |");
+                        stockLine.append(" Stock: 0              |");
+                    }
+                } else {
+                    // Blank panel for any odd slots exceeding array length to maintain grid shape
+                    nameLine.append("                       |");
+                    priceLine.append("                       |");
+                    calLine.append("                       |");
+                    stockLine.append("                       |");
+                }
+            }
+
+            // Print the constructed row details
+            System.out.println(nameLine);
+            System.out.println(priceLine);
+            System.out.println(calLine);
+            System.out.println(stockLine);
+        }
+        // Print the final bottom border of the machine frame
+        System.out.println(horizontalDivider);
+        System.out.println("=====================================================================================================");
+    }
+
+    /**
+     * Helper method to ensure long item names don't break the ASCII layout spacing.
+     */
+    private String truncate(String text, int length) {
+        if (text != null && text.length() > length) {
+            return text.substring(0, length - 2) + "..";
+        }
+        return text;
+    }
 }
+
+

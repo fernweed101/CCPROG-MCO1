@@ -2,9 +2,14 @@ import java.util.Scanner;
 
 public class TestDriver {
     static Scanner scanner = new Scanner(System.in);
+    
     public static void main(String[] args) {
         Maintenance maint = new Maintenance();
         RegularVendo vendo = setUpVendo(maint);
+        
+        // Display the machine before starting the transaction
+        vendo.display(); 
+        
         transaction(vendo);
     }
 
@@ -42,7 +47,6 @@ public class TestDriver {
         while (recieveMoney) {
             int inputCash = scanner.nextInt();
             
-            // FIXED: Directly stop processing if the user inputs 0 to avoid printing an invalid error
             if (inputCash == 0) {
                 recieveMoney = false; 
             } else {
@@ -57,37 +61,37 @@ public class TestDriver {
 
         //--------------------------------------------------------------------------------------
         //--Choose Item
-        System.out.println("Input Number of Slot with desired item:");
-        int itemWanted = scanner.nextInt();
-
-        // Checks if input is valid
-        if (vendo.chooseItem(itemWanted) < 0) {
-            System.out.println("Slot is either empty or DNE");
-        }else{
-            System.out.println("Selected: " + vendo.getItemSlot(itemWanted - 1).getItem().getName() + ", Price: P" + vendo.getItemSlot(itemWanted - 1).getItem().getPrice());
+        int itemWanted = -1;
+        int targetIndex = -1;
         
-       
-            // Passing itemWanted to chooseItem to get the verified internal array index
-            int targetIndex = vendo.chooseItem(itemWanted);
-            System.out.println("Proceed with the transaction? (1 - Yes, 0 - No)");
-            int proceed = scanner.nextInt();
-            //--------------------------------------------------------------------
-            //--Dispense or Cancel or Return Change
-            if (proceed == 1) {
-               // FIXED: dispenseItem returns a boolean success status now
-                boolean transactionSuccess = vendo.dispenseItem(targetIndex);
+        // LOOP: Keep asking until a valid, non-empty slot is selected
+        while (targetIndex < 0) {
+            System.out.println("Input Number of Slot with desired item:");
+            itemWanted = scanner.nextInt();
+            targetIndex = vendo.chooseItem(itemWanted);
 
-                // FIXED: If the transaction fails, trigger the original denomination refund mechanism
-                if (!transactionSuccess) {
-                    vendo.cancelPurchase();
-                }
-            } else {
-                System.out.println("Item unavailable or slot empty.");
-                vendo.cancelPurchase();
+            if (targetIndex < 0) {
+                System.out.println("Slot is either empty or does not exist. Please try again.");
             }
         }
 
-        
+        // If loop breaks, it means targetIndex is valid!
+        System.out.println("Selected: " + vendo.getItemSlot(itemWanted - 1).getItem().getName() + ", Price: P" + vendo.getItemSlot(itemWanted - 1).getItem().getPrice());
+    
+        System.out.println("Proceed with the transaction? (1 - Yes, 0 - No)");
+        int proceed = scanner.nextInt();
+        //--------------------------------------------------------------------
+        //--Dispense or Cancel or Return Change
+        if (proceed == 1) {
+            boolean transactionSuccess = vendo.dispenseItem(targetIndex);
+
+            if (!transactionSuccess) {
+                vendo.cancelPurchase();
+            }
+        } else {
+            System.out.println("Transaction cancelled by user.");
+            vendo.cancelPurchase();
+        }
     }
 
     public static void test2() {
@@ -110,27 +114,15 @@ public class TestDriver {
         // Simulating loading the machine's bank vault with a bunch of 1-peso coins for change
         maint.replenishDenomination(vendo, 1, 200);
 
+        vendo.display();
+
         //--StartTransaction
-        System.out.println("Input Number of Slot with desired item:");
-        int itemWanted = scanner.nextInt();
-
-        // Safety check to ensure user doesn't input an out-of-bounds slot number
-        if (itemWanted < 1 || itemWanted > slots) {
-            System.out.println("Invalid slot selection.");
-            scanner.close();
-            return;
-        }
-
-        System.out.println("Selected: " + vendo.getItemSlot(itemWanted - 1).getItem().getName() 
-                           + ", Price: P" + vendo.getItemSlot(itemWanted - 1).getItem().getPrice());
-        
         System.out.println("Insert cash denominations (1, 5, 10, 20, 50, 100, 200, 500, 1000). Enter 0 to stop inserting:");
         
         boolean status = true;
         while (status) {
             int inputCash = scanner.nextInt();
             
-            // FIXED: Directly stop processing if the user inputs 0 to avoid printing an invalid error
             if (inputCash == 0) {
                 status = false; 
             } else {
@@ -142,20 +134,34 @@ public class TestDriver {
                 }
             }
         }
-        
-        // Passing itemWanted to chooseItem to get the verified internal array index
-        int targetIndex = vendo.chooseItem(itemWanted);
-        
-        if (targetIndex >= 0) {
-            // FIXED: dispenseItem returns a boolean success status now
-            boolean transactionSuccess = vendo.dispenseItem(targetIndex);
 
-            // FIXED: If the transaction fails, trigger the original denomination refund mechanism
-            if (!transactionSuccess) {
-                vendo.cancelPurchase();
+        int itemWanted = -1;
+        int targetIndex = -1;
+        
+        // LOOP: Keep asking until a valid, non-empty slot is selected
+        while (targetIndex < 0) {
+            System.out.println("Input Number of Slot with desired item:");
+            itemWanted = scanner.nextInt();
+            
+            // Check bounds just in case they input something crazy like slot -50
+            if (itemWanted < 1 || itemWanted > slots) {
+                System.out.println("Invalid slot selection. Please try again.");
+                continue;
             }
-        } else {
-            System.out.println("Item unavailable or slot empty.");
+
+            targetIndex = vendo.chooseItem(itemWanted);
+
+            if (targetIndex < 0) {
+                System.out.println("Slot is either empty or does not exist. Please try again.");
+            }
+        }
+
+        System.out.println("Selected: " + vendo.getItemSlot(itemWanted - 1).getItem().getName() 
+                           + ", Price: P" + vendo.getItemSlot(itemWanted - 1).getItem().getPrice());
+        
+        boolean transactionSuccess = vendo.dispenseItem(targetIndex);
+
+        if (!transactionSuccess) {
             vendo.cancelPurchase();
         }
     }
