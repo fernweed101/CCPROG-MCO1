@@ -16,9 +16,9 @@ public class Driver {
             Maintenance maint = new Maintenance();
             
             System.out.println("Input the number of slots for the vending machine (Minimum of 8)");
-            int vendoSlots = scanner.nextInt();
+            int vendoSlots = readInt(scanner);
             System.out.println("Input the max capacity of items for a slot (Minimum of 10)");
-            int slotCap = scanner.nextInt();
+            int slotCap = readInt(scanner);
             RegularVendo vendo = new RegularVendo(vendoSlots, slotCap);
             System.out.println("=====================================================================================================");
             
@@ -44,14 +44,14 @@ public class Driver {
                     System.out.println("[4] Print Summary");
                     System.out.println("[5] Replenish Denomination");
                     System.out.println("[6] Exit");
-                    int input2 = scanner.nextInt();
+                    int input2 = readInt(scanner);
                     System.out.println("=====================================================================================================");
                     
                     switch (input2) {
                         case 1:
                             Item createdItem = newItem(vendo);
                             System.out.println("How many of " + createdItem.getName() + " should be put in the machine");
-                            int quantity = scanner.nextInt();
+                            int quantity = readInt(scanner);
                             maint.stockItem(vendo, createdItem, quantity);
                             break;
                         case 2:
@@ -61,12 +61,12 @@ public class Driver {
                                     System.out.println("[" + slot.getSlot() + "] " + slot.getItem().getName());
                                 }
                             }
-                            int index = scanner.nextInt() - 1;
+                            int index = readInt(scanner) - 1;
                             if(index < 0 || index >= vendo.getItemSlots().length || vendo.getItemSlots()[index].getItem() == null) {
                                 System.out.println("Invalid slot selection.");
                             }else{
                                  System.out.println("Enter new price for " + vendo.getItemSlots()[index].getItem().getName());
-                                int price = scanner.nextInt();
+                                int price = readInt(scanner);
                                 maint.setItemPrice(vendo.getItemSlots()[index].getItem(), price);
                             }
                             break;
@@ -78,15 +78,16 @@ public class Driver {
                             break;
                         case 5:
                             System.out.println("Enter Denomination to be replenished");
-                            int denom = scanner.nextInt();
+                            int denom = readInt(scanner);
                             System.out.println("Enter quantity of denominations to be added");
-                            int quant = scanner.nextInt();
+                            int quant = readInt(scanner);
                             maint.replenishDenomination(vendo, denom, quant);
                             break;
                         default:
                             System.out.println("Invalid Input");
                             break;
                     }
+                    System.out.println("=====================================================================================================");
                 }
             }while(input == 1 || input == 2);
         }
@@ -103,7 +104,7 @@ public class Driver {
         
         boolean recieveMoney = true;
         while (recieveMoney) {
-            int inputCash = scanner.nextInt();
+            int inputCash = readInt(scanner);
             
             if (inputCash == 0) {
                 recieveMoney = false; 
@@ -125,7 +126,7 @@ public class Driver {
         // LOOP: Keep asking until a valid, non-empty slot is selected
         while (targetIndex < 0 && itemWanted != 0) {
             System.out.println("Input Number of Slot with desired item: (Enter 0 to Cancel)");
-            itemWanted = scanner.nextInt();
+            itemWanted = readInt(scanner);
             targetIndex = vendo.chooseItem(itemWanted);
 
             if (targetIndex < 0 && itemWanted != 0){
@@ -138,13 +139,13 @@ public class Driver {
             System.out.println("Selected: " + vendo.getItemSlots()[itemWanted - 1].getItem().getName() + ", Price: P" + vendo.getItemSlots()[itemWanted - 1].getItem().getPrice());
     
             System.out.println("Proceed with the transaction? (1 - Yes, 0 - No)");
-            int proceed = scanner.nextInt();
+            int proceed = readInt(scanner);
             //--------------------------------------------------------------------
             //--Dispense or Cancel or Return Change
             if (proceed == 1) {
                 boolean transactionSuccess = vendo.dispenseItem(targetIndex);
 
-               if (!transactionSuccess) {
+                if (!transactionSuccess) {
                     vendo.cancelPurchase();
                 }
             } else {
@@ -171,9 +172,9 @@ public class Driver {
 
         if(retItem == null){
             System.out.println("Please Amount of Calories of Item: ");
-            double calories = scanner.nextDouble();
+            double calories = readDouble(scanner);
             System.out.println("Please Input Item Price: ");
-            int price = scanner.nextInt();
+            int price = readInt(scanner);
 
             retItem = new Item(name, calories, price);
         }
@@ -187,7 +188,17 @@ public class Driver {
             System.out.println("Please enter a number.");
             scanner.next();
         }
-    retval = scanner.nextInt();
+        retval = scanner.nextInt();
+        return retval;
+    }
+
+    private static double readDouble(Scanner scanner) {
+        double retval;
+        while (!scanner.hasNextDouble()) {
+            System.out.println("Please enter a number.");
+            scanner.next();
+        }
+    retval = scanner.nextDouble();
     return retval;
     }
 

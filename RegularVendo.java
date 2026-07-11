@@ -84,7 +84,7 @@ public class RegularVendo {
             }
         }
 
-        // NO BREAKS: Directly check state and return
+        
         if (remainingChange == 0) {
             this.cash = tempCash; // Commit vault changes since change calculation succeeded
             return change;

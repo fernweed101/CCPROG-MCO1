@@ -51,7 +51,7 @@ public class Maintenance{
                     for(int i = 0; i < quantity; i++){
                         vendo.addDenomination(value);
                     }
-                    System.out.println("Added "+ quantity +" " + value + " to vendo denominations");
+                    System.out.println("Added "+ quantity +" Php" + value + " to vendo denominations");
                     break;    
                 default:
                     System.out.println("This vending machine does not use Php" + value);
