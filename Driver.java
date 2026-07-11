@@ -10,7 +10,7 @@ public class Driver {
         System.out.println("Choose a type of vending machine to create");
         System.out.println("[1] Regular Vending Machine");
         System.out.println("[2] Exit");
-        input = scanner.nextInt();
+        input = readInt(scanner);
         System.out.println("=====================================================================================================");
         if(input == 1){
             Maintenance maint = new Maintenance();
@@ -27,13 +27,14 @@ public class Driver {
                 System.out.println("[1] Vending machine features");
                 System.out.println("[2] Maintenance Features");
                 System.out.println("[3] Exit");
-                input = scanner.nextInt();
+                input = readInt(scanner);
                 System.out.println("=====================================================================================================");
                 
                 //Vending Fratures
                 if(input == 1){
                     vendo.display();
                     transaction(vendo);
+                    System.out.println("=====================================================================================================");
                 }else if(input == 2){
                     //Maintenance Features
                     System.out.println("What Maintenance Features do you want to try");
@@ -41,7 +42,8 @@ public class Driver {
                     System.out.println("[2] Set an Item's Price");
                     System.out.println("[3] Collect Payment");
                     System.out.println("[4] Print Summary");
-                    System.out.println("[5] Exit");
+                    System.out.println("[5] Replenish Denomination");
+                    System.out.println("[6] Exit");
                     int input2 = scanner.nextInt();
                     System.out.println("=====================================================================================================");
                     
@@ -75,6 +77,11 @@ public class Driver {
                             maint.printSummary(vendo);
                             break;
                         case 5:
+                            System.out.println("Enter Denomination to be replenished");
+                            int denom = scanner.nextInt();
+                            System.out.println("Enter quantity of denominations to be added");
+                            int quant = scanner.nextInt();
+                            maint.replenishDenomination(vendo, denom, quant);
                             break;
                         default:
                             System.out.println("Invalid Input");
@@ -157,7 +164,7 @@ public class Driver {
         String name = scanner.next();
 
         for(ItemSlot slot : vendo.getItemSlots()){
-            if(slot.getItem() != null && slot.getItem().getName().equals(name)){
+            if(slot.getItem() != null && slot.getItem().getName().equalsIgnoreCase(name)){
                 retItem = slot.getItem();
             }
         }
@@ -172,6 +179,17 @@ public class Driver {
         }
 
         return retItem;
+    }
+
+    private static int readInt(Scanner scanner) {
+        int retval;
+        while (!scanner.hasNextInt()) {
+            System.out.println("Please enter a number.");
+            scanner.next();
+        }
+    retval = scanner.nextInt();
+    System.out.println("INPUT: " + retval);
+    return retval;
     }
 
 }
