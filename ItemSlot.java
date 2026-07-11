@@ -9,8 +9,12 @@ public class ItemSlot {
 
     public ItemSlot(int slotId, int slotCapacity) {
         this.slotId = slotId;
-        this.slotCapacity = slotCapacity;
         this.items = new ArrayList<Item>();
+        if (slotCapacity < 10) {
+            this.slotCapacity = 10;
+        }else{
+            this.slotCapacity = slotCapacity;
+        }
     }
 
     public int getSlot() {

@@ -9,14 +9,24 @@ public class RegularVendo {
     private ArrayList<Integer> customerDenominations; 
 
     public RegularVendo(int slots, int slotCapacity) {
-        this.slots = new ItemSlot[slots];
         this.totalCash = 0;
         this.cash = new ArrayList<Integer>();
         this.customerDenominations = new ArrayList<Integer>();
 
-        for (int i = 0; i < slots; i++) {
+        //Creates the slots of the vending machine
+        if(slots < 8){
+            this.slots = new ItemSlot[8];
+            for (int i = 0; i < 8; i++) {
+                this.slots[i] = new ItemSlot(i + 1, slotCapacity);
+            }
+        }else{
+            this.slots = new ItemSlot[slots];
+            for (int i = 0; i < slots; i++) {
             this.slots[i] = new ItemSlot(i + 1, slotCapacity);
+            }
         }
+
+        System.out.println("Vendo Created with " + this.slots.length + " slots and " + this.slots[0].getSlotCapacity() + " slot capacity");
     }
 
     public ItemSlot[] getItemSlots() { 
@@ -32,49 +42,54 @@ public class RegularVendo {
         this.totalCash = total; 
     }
 
+    //Returns true if payment value is valid
     public boolean recievePayment(int value) {
         switch (value) {
-            case 1: case 5: case 10: case 20: case 50: 
-            case 100: case 200: case 500: case 1000:
+            case 1: 
+            case 5: 
+            case 10: 
+            case 20: 
+            case 50: 
+            case 100: 
+            case 200: 
+            case 500: 
+            case 1000:
                 this.customerDenominations.add(value);
                 this.totalCustomerCash += value;
-                return true; // Returns immediately, no break needed   
+                return true;  
             default:
                 return false;
         }
     }
 
-    /**
-     * Attempts to build change using the machine's bank.
-     * If exact change cannot be formed, it returns null.
-     */
+    //
     public ArrayList<Integer> produceChange(int totalChange) {
         ArrayList<Integer> change = new ArrayList<Integer>();
         
-        // Create a temporary clone of the vault so we don't accidentally 
-        // permanently modify it if change generation fails halfway through
-        ArrayList<Integer> tempVault = new ArrayList<>(this.cash);
-        Collections.sort(tempVault, Collections.reverseOrder());
+        ArrayList<Integer> tempCash = new ArrayList<>(this.cash);
+        Collections.sort(tempCash, Collections.reverseOrder()); //Sorts the tempCash
 
         int remainingChange = totalChange;
         
-        for (int i = 0; i < tempVault.size(); i++) {
-            int coinOrBill = tempVault.get(i);
-            if (coinOrBill <= remainingChange) {
-                change.add(coinOrBill);
-                remainingChange -= coinOrBill;
-                tempVault.remove(i);
+        for (int i = 0; i < tempCash.size(); i++) {
+            int denomination = tempCash.get(i);
+            if (denomination <= remainingChange) {
+                change.add(denomination);
+                remainingChange -= denomination;
+                tempCash.remove(i);
                 i--; // Adjust index due to removal
             }
         }
 
         // NO BREAKS: Directly check state and return
         if (remainingChange == 0) {
-            this.cash = tempVault; // Commit vault changes since change calculation succeeded
+            this.cash = tempCash; // Commit vault changes since change calculation succeeded
             return change;
+        }else{
+            change = null;
         }
 
-        return null; // Could not make exact change
+        return change; // Could not make exact change
     }
 
     public int chooseItem(int slot) {
