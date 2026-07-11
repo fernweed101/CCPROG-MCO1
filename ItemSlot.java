@@ -12,6 +12,7 @@ public class ItemSlot {
         initial = true;
         this.item = null;
         this.slotId = slotId;
+        this.initalNum = 0;
         this.items = new ArrayList<Item>();
         if (slotCapacity < 10) {
             this.slotCapacity = 10;
@@ -45,13 +46,16 @@ public class ItemSlot {
         this.item = item;
     }
 
-    public boolean addItem(Item newItem) {
+    public boolean addItem(Item newItem, int quantity) {
         if(initial){
             this.item = newItem;
+            this.initalNum = quantity;
             initial = false;
         }
-        if (this.items.size() < this.slotCapacity) {
-            this.items.add(newItem);
+        if (this.items.size() + quantity < this.slotCapacity) {
+            for(int i = 0; i < quantity; i++){
+                this.items.add(newItem);
+            }
             return true;
         }
         return false;

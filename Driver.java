@@ -1,0 +1,130 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Driver {
+        static Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args){
+        Scanner scanner = new Scanner(System.in);
+        int input;
+
+        System.out.println("Choose a type of vending machine to create");
+        System.out.println("[1] Regular Vending Machine");
+        System.out.println("[2] Exit");
+        input = scanner.nextInt();
+        System.out.println("=====================================================================================================");
+        if(input == 1){
+            Maintenance maint = new Maintenance();
+            
+            System.out.println("Input the number of slots for the vending machine (Minimum of 8)");
+            int vendoSlots = scanner.nextInt();
+            System.out.println("Input the max capacity of items for a slot (Minimum of 10)");
+            int slotCap = scanner.nextInt();
+            RegularVendo vendo = new RegularVendo(vendoSlots, slotCap);
+            System.out.println("=====================================================================================================");
+            
+            do{
+                System.out.println("Would you like to test the Vending Features or the Maintenance Features");
+                System.out.println("[1] Vending machine features");
+                System.out.println("[2] Maintenance Features");
+                System.out.println("[3] Exit");
+                input = scanner.nextInt();
+                System.out.println("=====================================================================================================");
+                
+                //Vending Fratures
+                if(input == 1){
+                    vendo.display();
+                    transaction(vendo);
+                }else if(input == 2){
+                    //Maintenance Features
+                    System.out.println("What Maintenance Features do you want to try");
+                    System.out.println("[1] Stock/Restock an Item");
+                    System.out.println("[2] Set an Item's Price");
+                    System.out.println("[3] Collect Payment");
+                    System.out.println("[4] Print Summary");
+                    System.out.println("[5] Exit");
+                    input = scanner.nextInt();
+                    System.out.println("=====================================================================================================");
+                    
+                    switch (input) {
+                        case 1:
+                            break;
+                        case 2:
+                            
+                        case 5:
+                            
+                        default:
+                            System.out.println("Invalid Input");
+                            break;
+                    }
+                }
+            }while(input == 1 || input == 2);
+        }
+
+        scanner.close();
+    }
+
+    private static void transaction(RegularVendo vendo){
+
+        //--StartTransaction
+        //------------------------------------------------------------------------------
+        //--Enter Money
+        System.out.println("Insert cash denominations (1, 5, 10, 20, 50, 100, 200, 500, 1000). Enter 0 to stop inserting:");
+        
+        boolean recieveMoney = true;
+        while (recieveMoney) {
+            int inputCash = scanner.nextInt();
+            
+            if (inputCash == 0) {
+                recieveMoney = false; 
+            } else {
+                boolean accepted = vendo.recievePayment(inputCash);
+                if (!accepted) {
+                    System.out.println("Invalid denomination rejected.");
+                } else {
+                    System.out.println("Current Inserted Balance: P" + vendo.getTotalCustomerCash());
+                }
+            }
+        }
+
+        //--------------------------------------------------------------------------------------
+        //--Choose Item
+        int itemWanted = -1;
+        int targetIndex = -1;
+        
+        // LOOP: Keep asking until a valid, non-empty slot is selected
+        while (targetIndex < 0 && itemWanted != 0) {
+            System.out.println("Input Number of Slot with desired item: (Enter 0 to Cancel)");
+            itemWanted = scanner.nextInt();
+            targetIndex = vendo.chooseItem(itemWanted);
+
+            if (targetIndex < 0 && itemWanted != 0){
+                System.out.println("Slot is either empty or does not exist. Please try again.");
+            }
+        }
+
+       if(itemWanted != 0){
+            // If loop breaks, it means targetIndex is valid!
+            System.out.println("Selected: " + vendo.getItemSlots()[itemWanted - 1].getItem().getName() + ", Price: P" + vendo.getItemSlots()[itemWanted - 1].getItem().getPrice());
+    
+            System.out.println("Proceed with the transaction? (1 - Yes, 0 - No)");
+            int proceed = scanner.nextInt();
+            //--------------------------------------------------------------------
+            //--Dispense or Cancel or Return Change
+            if (proceed == 1) {
+                boolean transactionSuccess = vendo.dispenseItem(targetIndex);
+
+               if (!transactionSuccess) {
+                    vendo.cancelPurchase();
+                }
+            } else {
+                System.out.println("Transaction cancelled by user.");
+                vendo.cancelPurchase();
+            }
+
+        }else{
+            vendo.cancelPurchase();
+       }
+
+    }
+
+}

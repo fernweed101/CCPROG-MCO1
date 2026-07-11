@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class RegularVendo {
@@ -29,8 +30,8 @@ public class RegularVendo {
         System.out.println("Vendo Created with " + this.slots.length + " slots and " + this.slots[0].getSlotCapacity() + " slot capacity");
     }
 
-    public ItemSlot getItemSlot(int index) { 
-        return this.slots[index]; 
+    public ItemSlot[] getItemSlots() { 
+        return Arrays.copyOf(slots, slots.length);
     }
     public int getTotalCash() { 
         return this.totalCash; 
@@ -39,7 +40,9 @@ public class RegularVendo {
         return this.totalCustomerCash; 
     }
     public void setTotalCash(int total) { 
-        this.totalCash = total; 
+        if(total >= 0){
+            this.totalCash = total;
+        } 
     }
 
     //Returns true if payment value is valid
@@ -56,7 +59,6 @@ public class RegularVendo {
             case 1000:
                 this.customerDenominations.add(value);
                 this.totalCustomerCash += value;
-                System.out.println(this.customerDenominations);
                 return true;  
             default:
                 return false;
@@ -174,14 +176,14 @@ public class RegularVendo {
         }
 
         if (index != -1) {
-            for (int i = 0; i < quantity; i++) {
-                slots[index].addItem(item);
-            }
+            slots[index].addItem(item, quantity);
             System.out.println(item.getName() + " has been restocked");
         } else {
             System.out.println("There are currently no empty slots in the vending machine");
         }
     }
+
+
     public void display() {
         System.out.println("\n=====================================================================================================");
         System.out.println("                                    VENDING MACHINE GLASS WINDOW                                     ");

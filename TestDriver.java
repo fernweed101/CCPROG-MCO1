@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TestDriver {
@@ -8,9 +9,10 @@ public class TestDriver {
         RegularVendo vendo = setUpVendo(maint);
         
         // Display the machine before starting the transaction
-        vendo.display(); 
+        maint.printSummary(vendo);
         
         transaction(vendo);
+        maint.printSummary(vendo);
     }
 
     public static RegularVendo setUpVendo(Maintenance maint){
@@ -41,7 +43,7 @@ public class TestDriver {
         //--StartTransaction
         //------------------------------------------------------------------------------
         //--Enter Money
-         System.out.println("Insert cash denominations (1, 5, 10, 20, 50, 100, 200, 500, 1000). Enter 0 to stop inserting:");
+        System.out.println("Insert cash denominations (1, 5, 10, 20, 50, 100, 200, 500, 1000). Enter 0 to stop inserting:");
         
         boolean recieveMoney = true;
         while (recieveMoney) {
@@ -76,7 +78,7 @@ public class TestDriver {
         }
 
         // If loop breaks, it means targetIndex is valid!
-        System.out.println("Selected: " + vendo.getItemSlot(itemWanted - 1).getItem().getName() + ", Price: P" + vendo.getItemSlot(itemWanted - 1).getItem().getPrice());
+        System.out.println("Selected: " + vendo.getItemSlots()[itemWanted - 1].getItem().getName() + ", Price: P" + vendo.getItemSlots()[itemWanted - 1].getItem().getPrice());
     
         System.out.println("Proceed with the transaction? (1 - Yes, 0 - No)");
         int proceed = scanner.nextInt();
@@ -156,8 +158,7 @@ public class TestDriver {
             }
         }
 
-        System.out.println("Selected: " + vendo.getItemSlot(itemWanted - 1).getItem().getName() 
-                           + ", Price: P" + vendo.getItemSlot(itemWanted - 1).getItem().getPrice());
+        System.out.println("Selected: " + vendo.getItemSlots()[itemWanted - 1].getItem().getName() + ", Price: P" + vendo.getItemSlots()[itemWanted - 1].getItem().getPrice());
         
         boolean transactionSuccess = vendo.dispenseItem(targetIndex);
 

@@ -6,12 +6,33 @@ public class Maintenance{
     }
 
     public void setItemPrice(Item item, int price){
-        item.setPrice(price);
+        if(price > 0){
+            item.setPrice(price);
+        }else{
+            System.out.println("Price cannot be a negative value");
+        }
     }
 
     public void collectPayment(RegularVendo vendo){
         totalCash += vendo.getTotalCash();
         vendo.setTotalCash(0);
+    }
+
+    public void printSummary(RegularVendo vendo){
+        System.out.println("=====================================================================================================");
+        System.out.println("Summary of Transactions");
+        System.out.println("Item: Initial, Current, Sold");
+        int itemsSold = 0;
+
+        for(ItemSlot slot : vendo.getItemSlots()){
+            int numSold = slot.getInitialNum() - slot.getNumItems();
+            itemsSold += numSold;
+            if(slot.getItem() != null){
+                System.out.println(slot.getItem().getName() + ": " + slot.getInitialNum() + ", " +  slot.getNumItems() + ", " +  numSold);
+            }
+        }
+
+        System.out.println("Total Items Sold: " + itemsSold);
     }
 
     public void replenishDenomination(RegularVendo vendo, int value, int quantity){
