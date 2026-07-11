@@ -9,7 +9,7 @@ public class ItemSlot {
     private boolean initial;
 
     public ItemSlot(int slotId, int slotCapacity) {
-        inital = true;
+        initial = true;
         this.item = null;
         this.slotId = slotId;
         this.items = new ArrayList<Item>();
