@@ -10,12 +10,14 @@ public class TestDriver {
 
     public static RegularVendo setUpVendo(Maintenance maint){
         
+        //Creating vendo -----------------------------------------------------------------------
         System.out.println("Input Number of Slots for Vending Machine: (At least 8)");
         int slots = scanner.nextInt();
         System.out.println("Input Item Capacity for vendo slot: (At least 10)");
         int slotCap = scanner.nextInt();
         RegularVendo vendo = new RegularVendo(slots, slotCap);
 
+        //Creating items-----------------------------------------------------------------
         Item soda = new Item("Soda", 150, 67);
         Item chips = new Item("Chips", 300, 80);
         Item terraria = new Item("Terraria", 50, 167); 
@@ -32,28 +34,17 @@ public class TestDriver {
     public static void transaction(RegularVendo vendo){
 
         //--StartTransaction
-        System.out.println("Input Number of Slot with desired item:");
-        int itemWanted = scanner.nextInt();
-
-        // Safety check to ensure user doesn't input an out-of-bounds slot number
-        if (itemWanted < 1 || itemWanted > vendo.getItemSlots().length || vendo.getItemSlots()[itemWanted-1].getNumItems() == 0) {
-            System.out.println("Invalid slot selection.");
-            scanner.close();
-            return;
-        }
-
-        System.out.println("Selected: " + vendo.getItemSlots()[itemWanted - 1].getItem().getName() 
-                           + ", Price: P" + vendo.getItemSlots()[itemWanted - 1].getItem().getPrice());
+        //------------------------------------------------------------------------------
+        //--Enter Money
+         System.out.println("Insert cash denominations (1, 5, 10, 20, 50, 100, 200, 500, 1000). Enter 0 to stop inserting:");
         
-        System.out.println("Insert cash denominations (1, 5, 10, 20, 50, 100, 200, 500, 1000). Enter 0 to stop inserting:");
-        
-        boolean status = true;
-        while (status) {
+        boolean recieveMoney = true;
+        while (recieveMoney) {
             int inputCash = scanner.nextInt();
             
             // FIXED: Directly stop processing if the user inputs 0 to avoid printing an invalid error
             if (inputCash == 0) {
-                status = false; 
+                recieveMoney = false; 
             } else {
                 boolean accepted = vendo.recievePayment(inputCash);
                 if (!accepted) {
@@ -63,22 +54,40 @@ public class TestDriver {
                 }
             }
         }
-        
-        // Passing itemWanted to chooseItem to get the verified internal array index
-        int targetIndex = vendo.chooseItem(itemWanted);
-        
-        if (targetIndex >= 0) {
-            // FIXED: dispenseItem returns a boolean success status now
-            boolean transactionSuccess = vendo.dispenseItem(targetIndex);
 
-            // FIXED: If the transaction fails, trigger the original denomination refund mechanism
-            if (!transactionSuccess) {
+        //--------------------------------------------------------------------------------------
+        //--Choose Item
+        System.out.println("Input Number of Slot with desired item:");
+        int itemWanted = scanner.nextInt();
+
+        // Checks if input is valid
+        if (vendo.chooseItem(itemWanted) < 0) {
+            System.out.println("Slot is either empty or DNE");
+        }else{
+            System.out.println("Selected: " + vendo.getItemSlot(itemWanted - 1).getItem().getName() + ", Price: P" + vendo.getItemSlot(itemWanted - 1).getItem().getPrice());
+        
+       
+            // Passing itemWanted to chooseItem to get the verified internal array index
+            int targetIndex = vendo.chooseItem(itemWanted);
+            System.out.println("Proceed with the transaction? (1 - Yes, 0 - No)");
+            int proceed = scanner.nextInt();
+            //--------------------------------------------------------------------
+            //--Dispense or Cancel or Return Change
+            if (proceed == 1) {
+               // FIXED: dispenseItem returns a boolean success status now
+                boolean transactionSuccess = vendo.dispenseItem(targetIndex);
+
+                // FIXED: If the transaction fails, trigger the original denomination refund mechanism
+                if (!transactionSuccess) {
+                    vendo.cancelPurchase();
+                }
+            } else {
+                System.out.println("Item unavailable or slot empty.");
                 vendo.cancelPurchase();
             }
-        } else {
-            System.out.println("Item unavailable or slot empty.");
-            vendo.cancelPurchase();
         }
+
+        
     }
 
     public static void test2() {
@@ -112,8 +121,8 @@ public class TestDriver {
             return;
         }
 
-        System.out.println("Selected: " + vendo.getItemSlots()[itemWanted - 1].getItem().getName() 
-                           + ", Price: P" + vendo.getItemSlots()[itemWanted - 1].getItem().getPrice());
+        System.out.println("Selected: " + vendo.getItemSlot(itemWanted - 1).getItem().getName() 
+                           + ", Price: P" + vendo.getItemSlot(itemWanted - 1).getItem().getPrice());
         
         System.out.println("Insert cash denominations (1, 5, 10, 20, 50, 100, 200, 500, 1000). Enter 0 to stop inserting:");
         

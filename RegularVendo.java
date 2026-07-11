@@ -10,8 +10,8 @@ public class RegularVendo {
 
     public RegularVendo(int slots, int slotCapacity) {
         this.totalCash = 0;
-        this.cash = new ArrayList<Integer>();
-        this.customerDenominations = new ArrayList<Integer>();
+        this.cash = new ArrayList<>();
+        this.customerDenominations = new ArrayList<>();
 
         //Creates the slots of the vending machine
         if(slots < 8){
@@ -29,8 +29,8 @@ public class RegularVendo {
         System.out.println("Vendo Created with " + this.slots.length + " slots and " + this.slots[0].getSlotCapacity() + " slot capacity");
     }
 
-    public ItemSlot[] getItemSlots() { 
-        return this.slots; 
+    public ItemSlot getItemSlot(int index) { 
+        return this.slots[index]; 
     }
     public int getTotalCash() { 
         return this.totalCash; 
@@ -56,6 +56,7 @@ public class RegularVendo {
             case 1000:
                 this.customerDenominations.add(value);
                 this.totalCustomerCash += value;
+                System.out.println(this.customerDenominations);
                 return true;  
             default:
                 return false;
@@ -64,7 +65,7 @@ public class RegularVendo {
 
     //
     public ArrayList<Integer> produceChange(int totalChange) {
-        ArrayList<Integer> change = new ArrayList<Integer>();
+        ArrayList<Integer> change = new ArrayList<>();
         
         ArrayList<Integer> tempCash = new ArrayList<>(this.cash);
         Collections.sort(tempCash, Collections.reverseOrder()); //Sorts the tempCash
@@ -92,70 +93,63 @@ public class RegularVendo {
         return change; // Could not make exact change
     }
 
-    public int chooseItem(int slot) {
+    public int chooseItem(int slotIndex) {
+        int retVal = -1;
+
         for (int i = 0; i < slots.length; i++) {
-            if (slots[i].getSlot() == slot && slots[i].getItem() != null && slots[i].getNumItems() > 0) {
-                return i; // Returns immediately once found
+            if (slots[i].getSlot() == slotIndex && slots[i].getItem() != null && slots[i].getNumItems() > 0) {
+                retVal = i;
             }
         }
-        return -1; 
+
+        //System.out.println("RETVAL FOR CHOOSE ITEM IS: " + retVal);
+        return retVal; //Returns index of itemSlot and checks if its empty, -1 if empty or not found
     }
 
-    /**
-     * Handles the dispensing logic safely. 
-     * Returns true if successful, false if it fails (triggering a refund).
-     */
+    
+    //Returns true if dispense succesful
     public boolean dispenseItem(int index) {
-        // Validation Guard Rails (Handles invalid index or empty slots safely)
-        if (index < 0 || index >= slots.length || slots[index].getItem() == null) {
-            System.out.println("Invalid slot or item unavailable.");
-            return false;
-        }
-
         Item item = slots[index].getItem();
+        boolean status = false;
 
         // Check for insufficient funds
         if (this.totalCustomerCash < item.getPrice()) {
             System.out.println("Insufficient funds for " + item.getName());
-            return false;
-        }
+        }else{
+            int changeNeeded = this.totalCustomerCash - item.getPrice();
+            ArrayList<Integer> calculatedChange = produceChange(changeNeeded);
 
-        int changeNeeded = this.totalCustomerCash - item.getPrice();
-        ArrayList<Integer> calculatedChange = produceChange(changeNeeded);
+            //Checks if vendo has enough chagne for transaction
+            if (calculatedChange == null && changeNeeded > 0) {
+                System.out.println("Machine cannot provide exact change for this transaction.");
+            }else{
+                System.out.println(item.getName() + " has been dispensed!");
+                slots[index].dispense();
 
-        // Check if machine lacks proper change denominations
-        if (calculatedChange == null && changeNeeded > 0) {
-            System.out.println("Machine cannot provide exact change for this transaction.");
-            return false;
-        }
+                // Move the customer's cash permanently into the machine's bank
+                this.cash.addAll(this.customerDenominations);
 
-        // Everything passed! Finalize the sale
-        System.out.println(item.getName() + " has been dispensed!");
-        slots[index].dispense();
+                
+                if (changeNeeded > 0) {
+                    System.out.println("Dispensing change: " + calculatedChange);
+                }
 
-        // Move the customer's cash permanently into the machine's bank
-        this.cash.addAll(this.customerDenominations);
-        
-        // Print change given to user (if any)
-        if (changeNeeded > 0) {
-            System.out.println("Dispensing change: " + calculatedChange);
+                status = true;
+            }
         }
 
         // Reset customer state for next user
-        this.customerDenominations.clear();
-        this.totalCustomerCash = 0;
-        return true;
+        return status;
     }
 
-    /**
-     * Completely refunds the exact denominations the user inserted
-     */
+
+
     public ArrayList<Integer> cancelPurchase() {
         ArrayList<Integer> refund = new ArrayList<>(this.customerDenominations);
+        System.out.println("Transaction failed/cancelled. Returning your original denominations: " + refund);
         this.customerDenominations.clear();
         this.totalCustomerCash = 0;
-        
-        System.out.println("Transaction failed/cancelled. Returning your original denominations: " + refund);
+
         return refund;
     }
 
