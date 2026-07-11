@@ -146,7 +146,6 @@ public class RegularVendo {
 
     public void addDenomination(int value) {
         this.cash.add(value);
-        System.out.println("Bank loaded with: P" + value);
     }
 
     public void addItemStock(Item item, int quantity) {

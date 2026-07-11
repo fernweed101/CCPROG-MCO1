@@ -23,9 +23,7 @@ public class TestDriver {
         maint.stockItem(vendo, terraria, 7);
         
         // Simulating loading the machine's bank vault with a bunch of 1-peso coins for change
-        for (int i = 0; i < 200; i++) {
-            vendo.addDenomination(1);
-        }
+        maint.replenishDenomination(vendo, 1, 200);
 
         System.out.println("Input Number of Slot with desired item:");
         int itemWanted = scanner.nextInt();
