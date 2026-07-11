@@ -3,19 +3,17 @@ public class Item {
     private int price;
     private double calories;
 
-    
-    public Item(String name, double calories, int price) {
-        this.name = name;
-        this.calories = calories;
-        this.price = price;
-    }
 
     public Item(String name, double calories){
         this.name = name;
         this.calories = calories;
     }
 
-
+    public Item(String name, double calories, int price) {
+        this.name = name;
+        this.calories = calories;
+        this.price = price;
+    }
   
     public String getName() {
         return this.name;

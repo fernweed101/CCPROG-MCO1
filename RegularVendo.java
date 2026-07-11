@@ -4,12 +4,14 @@ import java.util.Scanner;
 public class RegularVendo{
     private ItemSlot[] slots;
     private int totalCash;
-    private ArrayList<Integer> cash = new ArrayList<Integer>();
-    private ArrayList<Integer> customerDenominations = new ArrayList<Integer>();
+    private ArrayList<Integer> cash;
+    private ArrayList<Integer> customerDenominations;
 
     public RegularVendo(int slots){
-        this.totalCash = 0;
         this.slots = new ItemSlot[slots];
+        this.totalCash = 0;
+        this.cash = new ArrayList<Integer>();
+        this.customerDenominations = new ArrayList<Integer>();
     }
 
     public ItemSlot[] getItemSlots(){
@@ -20,12 +22,12 @@ public class RegularVendo{
         return this.totalCash;
     }
 
-    public void setTotalCash(int total){
-        this.totalCash = total;
+    public ArrayList<Integer> getDenominations(){
+        return this.cash;
     }
 
-    public ArrayList<Integer> getDenomination(){
-        return this.customerDenominations;
+    public void setTotalCash(int total){
+        this.totalCash = total;
     }
 
     public int recievePayment(){

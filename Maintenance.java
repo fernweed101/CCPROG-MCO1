@@ -45,7 +45,7 @@ public class Maintenance{
     public void replenishDenomination(RegularVendo vendo, int value, int quantity){
         for(int i = 0; i < quantity; i++){
             vendo.setTotalCash(vendo.getTotalCash() + quantity);
-            vendo.getDenomination().add(value);
+            vendo.getDenominations().add(value);
         }
     }
 }
