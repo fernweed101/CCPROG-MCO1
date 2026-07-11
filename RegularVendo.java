@@ -125,7 +125,7 @@ public class RegularVendo {
             int changeNeeded = this.totalCustomerCash - item.getPrice();
 
             //Checks if vendo has enough chagne for transaction
-            if (this.totalCash >= changeNeeded && changeNeeded > 0) {
+            if (this.totalCash >= changeNeeded && changeNeeded >= 0) {
                 
                 System.out.println(item.getName() + " has been dispensed!");
                 slots[index].dispense();
