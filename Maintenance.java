@@ -2,35 +2,7 @@ public class Maintenance{
     private int totalCash;
 
     public void stockItem(RegularVendo vendo, Item item, int quantity){
-        ItemSlot[] itemSlots = vendo.getItemSlots();
-        boolean found = false;
-
-        //Checks if item is already inside one of the slots
-        for(ItemSlot slot : itemSlots){
-            if(slot.getItem() != null && slot.getItem().equals(item)){
-                found = true;
-                for(int i = 0; i < quantity; i++){
-                    slot.addItem(item);
-                }
-            }
-        }
-
-        //If not found check for empty spaces to put the item into
-        if(!found){
-            for(ItemSlot slot : itemSlots){
-                if(slot.getItem() == null){
-                    found = true;
-                    for(int i = 0; i < quantity; i++){
-                        slot.addItem(item);
-                    }
-                }
-            }
-
-            //If all spaces are full, dont put item inside
-            if(!found){
-                System.out.println("Vendo Slots are all full");
-            }
-        }
+        vendo.addItemStock(item, quantity);
     }
 
     public void setItemPrice(Item item, int price){
@@ -43,9 +15,28 @@ public class Maintenance{
     }
 
     public void replenishDenomination(RegularVendo vendo, int value, int quantity){
-        for(int i = 0; i < quantity; i++){
-            vendo.setTotalCash(vendo.getTotalCash() + quantity);
-            vendo.getDenominations().add(value);
+        if(quantity > 0){
+            switch (value) {
+                case 1:
+                case 5:
+                case 10:
+                case 20:
+                case 50:
+                case 100:
+                case 200:
+                case 500:
+                case 1000:
+                    for(int i = 0; i < quantity; i++){
+                        vendo.addDenomination(value);
+                    }
+                    System.out.println("Added "+ quantity +" " + value + " to the internal cash bank.");
+                    break;    
+                default:
+                    System.out.println("This vending machine does not use Php" + value);
+                    break;
+            }
+        }else{
+            System.out.println("Invalid Input");
         }
     }
 }

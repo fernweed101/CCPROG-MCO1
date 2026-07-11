@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 public class ItemSlot {
     private int slotId;
+    private Item item;
     private ArrayList<Item> items;
     private int initalNum;
     private int slotCapacity;
