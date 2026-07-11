@@ -126,8 +126,7 @@ public class RegularVendo {
 
             //Checks if vendo has enough chagne for transaction
             if (this.totalCash >= changeNeeded && changeNeeded > 0) {
-                System.out.println("Machine cannot provide exact change for this transaction.");
-            }else{
+                
                 System.out.println(item.getName() + " has been dispensed!");
                 slots[index].dispense();
 
@@ -136,6 +135,9 @@ public class RegularVendo {
                 this.totalCash += item.getPrice();
 
                 status = true;
+            }else{
+                
+                System.out.println("Machine cannot provide exact change for this transaction.");
             }
         }
         return status;
